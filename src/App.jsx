@@ -1,6 +1,8 @@
 //https://www.meshy.ai/features/image-to-3d
 //https://sketchfab.com/feed
 
+//https://vercel.com/amy-lus-projects/amylu-place
+
 import { useState, useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Canvas } from "@react-three/fiber";
