@@ -8,6 +8,21 @@ import { useFrame } from "@react-three/fiber";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
+import { Link } from "react-router-dom";
+
+function TeslaModel({ position, rotation, scale, onClick }) {
+  const teslam3 = useGLTF("/models/teslam3.glb");
+  
+  return (
+    <primitive
+      object={teslam3.scene}
+      position={position}
+      rotation={rotation}
+      scale={scale}
+      onClick={onClick}
+    />
+  );
+}
 
 function ProjectModel({ position, rotation, scale, onClick }) {
   return (
@@ -157,15 +172,20 @@ export default function HomePage() {
     { id: 1, url: "/project1" },
     { id: 2, url: "/project2" },
     { id: 3, url: "/project3" },
-    { id: 4, url: "/project4" },
+    { id: 4, url: "/electromagnetism" },
     { id: 5, url: "/project5" },
   ];
   const radius = 10;
 
   return (
-    <div className="w-screen h-screen bg-gradient-to-br from-white via-gray-100 to-gray-300 relative">
-      <div className="absolute top-8 w-full text-center text-black">
+    <div className="w-screen h-screen bg-white relative">
+      <div className="absolute top-8 w-full text-center text-black z-50 pointer-events-auto">
         <h1 className="header font-bold">Amy Lu</h1>
+        <p className="mt-2 text-sm opacity-75">
+          <Link to="/about" className="underline cursor-pointer hover:text-gray-600">
+            About me
+          </Link>
+        </p>
         <p className="mt-2 text-sm opacity-75">drag to spin</p>
       </div>
       <div className="h-screen w-screen">
@@ -173,6 +193,7 @@ export default function HomePage() {
           camera={{ position: [0, 2, 25], fov: 50 }}
           gl={{ alpha: true }}
           style={{ background: "transparent" }}
+          className="z-0"
         >
           <ambientLight intensity={0.5} />
           <CameraLight />
@@ -205,11 +226,25 @@ export default function HomePage() {
                   key={i}
                   position={[x, 0, z]}
                   rotation={[0, -angle, 0]}
-                  scale={isActive ? 2 : 2} // changed it temporarily to no pop
+                  // scale={isActive ? 2 : 2} // changed it temporarily to no pop
+                  scale={2}
                   onClick={() => window.location.href = p.url}
                 >
                   <NoteSwarm />
                 </group>
+              );
+            }
+
+            if (i === 4) {
+              return (
+                <TeslaModel
+                  key={i}
+                  position={[x-2.5, 0, z]}
+                  rotation={[0, -angle + THREE.MathUtils.degToRad(60), 0]}
+                  // scale={isActive ? 2 : 1.5}
+                  scale={1.2}
+                  onClick={() => window.location.href = p.url}
+                />
               );
             }
 
@@ -218,7 +253,8 @@ export default function HomePage() {
                 key={i}
                 position={[x, 0, z]}
                 rotation={[0, -angle, 0]}
-                scale={isActive ? 2 : 2} // changed it temporarily to no pop
+                // scale={isActive ? 2 : 2} // changed it temporarily to no pop
+                scale={2}
                 onClick={() => window.location.href = p.url}
               />
             );
