@@ -24,6 +24,20 @@ function TeslaModel({ position, rotation, scale, onClick }) {
   );
 }
 
+function FormulaModel({ position, rotation, scale, onClick }) {
+  const formula = useGLTF("/models/formula_logo_extruded.glb");
+
+  return (
+    <primitive
+      object={formula.scene}
+      position={position}
+      rotation={rotation}
+      scale={scale}
+      onClick={onClick}
+    />
+  );
+}
+
 function ProjectModel({ position, rotation, scale, onClick }) {
   return (
     <mesh position={position} rotation={rotation} scale={scale} onClick={onClick}>
@@ -232,6 +246,18 @@ export default function HomePage() {
                 >
                   <NoteSwarm />
                 </group>
+              );
+            }
+
+            if (i === 0) {
+              return (
+                <FormulaModel
+                  key={i}
+                  position={[x, 0, z]}
+                  rotation={[0, -angle, 72.25]}
+                  scale={3.5}
+                  onClick={() => window.location.href = p.url}
+                />
               );
             }
 
