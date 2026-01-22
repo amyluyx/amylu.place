@@ -86,7 +86,7 @@ export default function Electromagnetism() {
     }
 
     function createParticle(position, charge) {
-      const geometry = new THREE.SphereGeometry(0.1, 32, 32);
+      const geometry = new THREE.SphereGeometry(0.1, 32, 32); // Original smaller size
       const material = new THREE.MeshPhongMaterial({
         color: charge > 0 ? 0x00ff00 : 0x0000ff,
       });
@@ -144,7 +144,12 @@ export default function Electromagnetism() {
       );
       const raycaster = new THREE.Raycaster();
       raycaster.setFromCamera(mouse, camera);
-      const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+      
+      // Create a plane perpendicular to the camera's view direction
+      const cameraDirection = new THREE.Vector3();
+      camera.getWorldDirection(cameraDirection);
+      const plane = new THREE.Plane(cameraDirection, 0);
+      
       const intersect = new THREE.Vector3();
       if (raycaster.ray.intersectPlane(plane, intersect)) {
         const charge = Math.random() > 0.5 ? 1 : -1;
