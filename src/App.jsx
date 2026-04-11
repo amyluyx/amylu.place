@@ -6,7 +6,7 @@
 import { useState, useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { OrbitControls, Text, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { Link } from "react-router-dom";
 
@@ -50,6 +50,88 @@ function ProjectModel({ position, rotation, scale, onClick }) {
         metalness={0.6}
       />
     </mesh>
+  );
+}
+
+function CapstonePanel({ onClose }) {
+  return (
+    <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/80 px-6">
+      <div className="max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-gray-200 bg-white p-8 shadow-2xl">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.25em] text-gray-500">Capstone</p>
+            <h2 className="mt-2 text-3xl font-bold text-black">Wick Academic Planning Assistant</h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-sm text-gray-500 transition hover:text-black"
+          >
+            close
+          </button>
+        </div>
+
+        <div className="mt-6 space-y-6 text-sm leading-6 text-gray-700">
+          <section>
+            <h3 className="text-base font-semibold text-black">Goals</h3>
+            <p className="mt-2">
+              Our capstone focuses on Wick, a chatbot-centered academic planning assistant for UW students.
+              The goal is to reduce the effort of tracking coursework, schedules, and major requirements by
+              centralizing fragmented academic information into one conversational system.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="text-base font-semibold text-black">Team Process</h3>
+            <p className="mt-2">
+              As a team, we scoped the MVP around three flows: conversational onboarding, personalized study
+              planning, and proactive deadline guidance. We built interactive prototypes for each flow, tested
+              them with UW students, and used feedback to simplify the dashboard, clarify onboarding, and reduce
+              notification noise.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="text-base font-semibold text-black">What We Built</h3>
+            <p className="mt-2">
+              The MVP includes an onboarding prototype that gathers academic context, a planning prototype that
+              generates study blocks around a student&apos;s schedule, and a proactive guidance prototype that
+              surfaces major application deadlines and prerequisite progress. Together these validate whether a
+              chat-based interface can make academic planning more actionable and less overwhelming.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="text-base font-semibold text-black">My Contribution</h3>
+            <p className="mt-2">
+              My individual focus is the AI/ML integration. I&apos;m working on how the chatbot interprets student
+              context, turns planning data into useful recommendations, and supports proactive academic guidance
+              with reliable, structured outputs instead of generic chat responses.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="text-base font-semibold text-black">Takeaways</h3>
+            <p className="mt-2">
+              The project has reinforced that the technical challenge is not only generating suggestions, but
+              making them trustworthy, editable, and grounded in real student data. User feedback showed strong
+              interest in automatic deadline aggregation and priority views, while also making it clear that long-
+              term usefulness depends on accuracy, syncing reliability, and clear explanations of how recommendations
+              are produced.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="text-base font-semibold text-black">Next Steps</h3>
+            <p className="mt-2">
+              The next phase is narrowing scope further and moving from prototype validation into implementation.
+              That includes building a working chatbot, handling academic data more robustly, and connecting the
+              AI layer to core planning features in a way that stays feasible for spring quarter development.
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -181,6 +263,7 @@ export default function HomePage() {
   const [rotation, setRotation] = useState(0);
   const [closestIndex, setClosestIndex] = useState(0);
   const [targetRotation, setTargetRotation] = useState(null);
+  const [showCapstonePanel, setShowCapstonePanel] = useState(false);
   const cameraYawRef = useRef(0);
   const projects = [
     { id: 1, url: "/project1" },
@@ -203,6 +286,7 @@ export default function HomePage() {
         <p className="mt-2 text-sm opacity-75">drag to spin</p>
       </div>
       <div className="h-screen w-screen">
+        {showCapstonePanel && <CapstonePanel onClose={() => setShowCapstonePanel(false)} />}
         <Canvas
           camera={{ position: [0, 2, 25], fov: 50 }}
           gl={{ alpha: true }}
@@ -232,8 +316,6 @@ export default function HomePage() {
             const x = Math.sin(angle) * radius;
             const z = -Math.cos(angle) * radius;
 
-            const isActive = i === closestIndex;
-
             if (i === 2) {
               return (
                 <group
@@ -245,6 +327,29 @@ export default function HomePage() {
                   onClick={() => window.location.href = p.url}
                 >
                   <NoteSwarm />
+                </group>
+              );
+            }
+
+            if (i === 1) {
+              return (
+                <group
+                  key={i}
+                  position={[x, 0, z]}
+                  rotation={[0, -angle, 0]}
+                  scale={2}
+                  onClick={() => setShowCapstonePanel(true)}
+                >
+                  <ProjectModel position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1} />
+                  <Text
+                    position={[0, -1.15, 0]}
+                    fontSize={0.18}
+                    color="#111111"
+                    anchorX="center"
+                    anchorY="middle"
+                  >
+                    capstone
+                  </Text>
                 </group>
               );
             }
